@@ -1,0 +1,352 @@
+{
+    "name": "Send messages on Facebook Messenger using a ChatGPT assistant",
+    "flow": [
+        {
+            "id": 1,
+            "module": "facebook-messenger:watchMessages",
+            "version": 2,
+            "parameters": {
+                "__IMTHOOK__": 3845209
+            },
+            "mapper": {},
+            "metadata": {
+                "designer": {
+                    "x": 300,
+                    "y": 0
+                },
+                "setupValidation": {
+                    "result": {
+                        "valid": true,
+                        "fields": []
+                    },
+                    "version": 1,
+                    "configuration": "cdfe83ef6f217b98"
+                },
+                "restore": {
+                    "parameters": {
+                        "__IMTHOOK__": {
+                            "data": {
+                                "editable": "false"
+                            },
+                            "label": "Haq Facebook Messenger webhook"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTHOOK__",
+                        "type": "hook:facebook-messenger3",
+                        "label": "Webhook",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        {
+            "id": 5,
+            "module": "openai-gpt-3:askAnything",
+            "version": 1,
+            "parameters": {},
+            "mapper": {
+                "model": "gpt-5-nano",
+                "textPrompt": "You are a customer support assistant for Haq.com.bd.\r\n\r\nBusiness: Haq.com.bd provides online courses and digital learning services related to AI, graphic design, video creation and online income.\r\n\r\nInstructions:\r\n- Reply professionally, politely and naturally.\r\n- If the customer writes in Bangla, reply in Bangla.\r\n- If the customer writes in English, reply in English.\r\n- Keep the reply short and helpful.\r\n- Do not invent prices, dates, discounts or other business information.\r\n- If you do not know the answer, direct the customer to https://haq.com.bd/\r\n- Do not mention that you are an AI.\r\n- Return only the message that should be sent to the customer.\r\n\r\nCustomer message: {{Facebook}}{{Messenger - Message}}{{Text}}"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 605,
+                    "y": 7
+                },
+                "restore": {
+                    "expect": {
+                        "model": {
+                            "label": "GPT-5 nanoThe most cost-effective option for casual conversation and straightforward, simple fact-retrieval"
+                        }
+                    }
+                },
+                "expect": [
+                    {
+                        "name": "model",
+                        "type": "select",
+                        "label": "Model",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "gpt-5-nano",
+                                "gpt-6-sol",
+                                "gpt-6-luna",
+                                "gpt-6-astra",
+                                "gpt-5.6-sol",
+                                "gpt-5.6-terra",
+                                "gpt-5.6-luna",
+                                "gpt-5.5",
+                                "gpt-5.4-nano",
+                                "gpt-5.4-mini",
+                                "gpt-5.4",
+                                "gpt-5.2",
+                                "gpt-5.1",
+                                "gpt-5",
+                                "gpt-5-mini"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "textPrompt",
+                        "type": "text",
+                        "label": "Text prompt",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        {
+            "id": 3,
+            "module": "facebook-messenger:sendMessage",
+            "version": 2,
+            "parameters": {
+                "__IMTCONN__": 11625876
+            },
+            "mapper": {
+                "message": {
+                    "text": " {{5.result}}",
+                    "attachment": {}
+                },
+                "recipient": {
+                    "id": "{{1.sender.id}}"
+                },
+                "messaging_type": "RESPONSE",
+                "notification_type": "REGULAR"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 900,
+                    "y": 0
+                },
+                "setupValidation": {
+                    "result": {
+                        "valid": true,
+                        "fields": []
+                    },
+                    "version": 1,
+                    "configuration": "ddafc01dcc6e104"
+                },
+                "restore": {
+                    "expect": {
+                        "message": {
+                            "nested": {
+                                "attachment": {
+                                    "nested": {
+                                        "type": {
+                                            "mode": "chose",
+                                            "label": "Empty"
+                                        }
+                                    }
+                                },
+                                "quick_replies": {
+                                    "mode": "chose"
+                                }
+                            }
+                        },
+                        "messaging_type": {
+                            "mode": "chose",
+                            "label": "Response"
+                        },
+                        "notification_type": {
+                            "mode": "chose",
+                            "label": "Sound / Vibration"
+                        }
+                    },
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "data": {
+                                "scoped": "true",
+                                "connection": "facebook-messenger2"
+                            },
+                            "label": "MDBadrul's Facebook Messenger connection"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:facebook-messenger2",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "messaging_type",
+                        "type": "select",
+                        "label": "Messaging Type",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "RESPONSE",
+                                "UPDATE",
+                                "MESSAGE_TAG"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "recipient",
+                        "spec": [
+                            {
+                                "name": "id",
+                                "type": "text",
+                                "label": "Page Scoped User ID (PSID)"
+                            },
+                            {
+                                "name": "user_ref",
+                                "type": "text",
+                                "label": "User Reference"
+                            },
+                            {
+                                "name": "post_id",
+                                "type": "text",
+                                "label": "Post ID"
+                            },
+                            {
+                                "name": "comment_id",
+                                "type": "text",
+                                "label": "Comment ID"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Recipient"
+                    },
+                    {
+                        "name": "message",
+                        "spec": [
+                            {
+                                "name": "text",
+                                "type": "text",
+                                "label": "Text",
+                                "validate": {
+                                    "max": 2000
+                                }
+                            },
+                            {
+                                "name": "attachment",
+                                "spec": [
+                                    {
+                                        "name": "type",
+                                        "type": "select",
+                                        "label": "Attachment Type",
+                                        "validate": {
+                                            "enum": [
+                                                "image",
+                                                "audio",
+                                                "video",
+                                                "file",
+                                                "template"
+                                            ]
+                                        }
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Attachment"
+                            },
+                            {
+                                "name": "quick_replies",
+                                "spec": [
+                                    {
+                                        "name": "content_type",
+                                        "type": "select",
+                                        "label": "Content Type",
+                                        "options": [
+                                            {
+                                                "label": "Text",
+                                                "value": "text",
+                                                "nested": [
+                                                    {
+                                                        "help": "The text to display on the quick reply button.",
+                                                        "name": "title",
+                                                        "type": "text",
+                                                        "label": "Title",
+                                                        "required": true,
+                                                        "validate": {
+                                                            "max": 20
+                                                        }
+                                                    },
+                                                    {
+                                                        "help": "Custom data that will be sent back to you via the `messaging_postbacks` webhook event.",
+                                                        "name": "payload",
+                                                        "type": "text",
+                                                        "label": "Payload",
+                                                        "validate": {
+                                                            "max": 1000
+                                                        }
+                                                    },
+                                                    {
+                                                        "help": "Required if `Title` is an `emptystring`. URL of image to display on the quick reply button for text quick replies. Image should be a minimum of 24px x 24px. Larger images will be automatically cropped and resized.",
+                                                        "name": "image_url",
+                                                        "type": "url",
+                                                        "label": "Image URL"
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "label": "User Phone Number",
+                                                "value": "user_phone_number"
+                                            },
+                                            {
+                                                "label": "User Email",
+                                                "value": "user_email"
+                                            }
+                                        ],
+                                        "required": true
+                                    }
+                                ],
+                                "type": "array",
+                                "label": "Quick Replies"
+                            },
+                            {
+                                "name": "metadata",
+                                "type": "text",
+                                "label": "Metadata",
+                                "validate": {
+                                    "max": 1000
+                                }
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Message"
+                    },
+                    {
+                        "name": "notification_type",
+                        "type": "select",
+                        "label": "Notification Type",
+                        "validate": {
+                            "enum": [
+                                "REGULAR",
+                                "SILENT_PUSH",
+                                "NO_PUSH"
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "metadata": {
+        "instant": true,
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": true,
+            "autoCommitTriggerLast": true,
+            "sequential": false,
+            "slots": null,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false,
+            "freshVariables": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "eu1.make.com",
+        "notes": []
+    }
+}
