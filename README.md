@@ -60,6 +60,6 @@ To deploy this automation, you will need:
 
 ## 👨‍💻 Author
 
-**[Your Name/Your GitHub Username]**
-- LinkedIn: [Link to your LinkedIn Profile]
-- Portfolio: [Link to your personal website if any]
+**[Md Badeul Haq ]**
+- LinkedIn: [[Link to your LinkedIn Profile]](https://bd.linkedin.com/in/haqueb)
+
